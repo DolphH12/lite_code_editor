@@ -1,30 +1,50 @@
 import 'package:flutter/material.dart';
 
-/// Define todos los colores del editor.
+/// Defines all visual tokens of the code editor.
+///
+/// Use [EditorTheme.dark] or [EditorTheme.light] for built-in themes,
+/// or construct your own with the default constructor.
 class EditorTheme {
-  // Fondo
+  /// Background color of the main code area.
   final Color background;
-  final Color gutterBackground; // fondo de la columna de números
+
+  /// Background color of the line number gutter.
+  final Color gutterBackground;
+
+  /// Color of the border between the gutter and the code area.
   final Color gutterBorder;
 
-  // Texto base
+  /// Default text color for unstyled code tokens.
   final Color textColor;
+
+  /// Color of inactive line numbers in the gutter.
   final Color gutterTextColor;
-  final Color gutterTextColorActive; // número de la línea activa
 
-  // Línea seleccionada
+  /// Color of the line number for the active or selected line.
+  final Color gutterTextColorActive;
+
+  /// Background color of a selected line in selection mode.
   final Color lineSelectedBackground;
-  final Color lineHighlightBackground; // línea donde está el cursor (edición)
 
-  // Cursor y selección de texto
+  /// Background color of the line where the cursor is placed.
+  final Color lineHighlightBackground;
+
+  /// Color of the text cursor.
   final Color cursorColor;
+
+  /// Color of the text selection highlight.
   final Color selectionColor;
 
-  // Fuente
+  /// Font family used for all code text.
   final String fontFamily;
+
+  /// Font size in logical pixels for all code text.
   final double fontSize;
+
+  /// Line height multiplier applied to all code lines.
   final double lineHeight;
 
+  /// Creates a fully custom [EditorTheme].
   const EditorTheme({
     required this.background,
     required this.gutterBackground,
@@ -41,7 +61,7 @@ class EditorTheme {
     required this.lineHeight,
   });
 
-  /// Tema oscuro estilo VS Code.
+  /// A dark theme inspired by VS Code Dark+.
   factory EditorTheme.dark() => const EditorTheme(
     background: Color(0xFF1E1E2E),
     gutterBackground: Color(0xFF1E1E2E),
@@ -58,7 +78,7 @@ class EditorTheme {
     lineHeight: 1.5,
   );
 
-  /// Tema claro (para uso futuro).
+  /// A clean light theme for bright UI environments.
   factory EditorTheme.light() => const EditorTheme(
     background: Color(0xFFFFFFFF),
     gutterBackground: Color(0xFFF3F3F3),

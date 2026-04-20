@@ -1,3 +1,21 @@
+/// A lightweight, customizable code editor widget for Flutter.
+///
+/// Provides syntax highlighting, auto-indent, autocomplete, and
+/// line selection mode with zero external dependencies.
+///
+/// ## Basic usage
+/// ```dart
+/// final controller = CodeEditorController(
+///   language: CodeLanguage.dart,
+///   initialCode: 'void main() {}',
+/// );
+///
+/// CodeEditor(
+///   controller: controller,
+///   theme: EditorTheme.dark(),
+///   onChanged: (code) => print(code),
+/// );
+/// ```
 library;
 
 export 'src/controller/code_editor_controller.dart';

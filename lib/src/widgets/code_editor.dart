@@ -3,15 +3,59 @@ import '../../lite_code_editor.dart';
 import 'code_field.dart';
 import 'line_numbers.dart';
 
+/// A full-featured code editor widget for Flutter.
+///
+/// Supports syntax highlighting, auto-indent, autocomplete suggestions,
+/// and an optional line selection mode.
+///
+/// ## Example
+/// ```dart
+/// CodeEditor(
+///   controller: CodeEditorController(
+///     initialCode: 'void main() {}',
+///     language: CodeLanguage.dart,
+///   ),
+///   theme: EditorTheme.dark(),
+///   onChanged: (code) => print(code),
+/// );
+/// ```
 class CodeEditor extends StatefulWidget {
+  /// The controller that manages the code content, language, and
+  /// line selection state.
   final CodeEditorController controller;
+
+  /// The visual theme applied to the editor.
+  ///
+  /// Defaults to [EditorTheme.dark] if not provided.
   final EditorTheme? theme;
+
+  /// Whether the editor is read-only.
+  ///
+  /// When `true`, the user cannot modify the code. Defaults to `false`.
   final bool readOnly;
+
+  /// Whether the editor is in line selection mode.
+  ///
+  /// When `true`, tapping a line highlights it and triggers
+  /// [onLineSelected]. Editing is disabled in this mode.
+  /// Defaults to `false`.
   final bool selectionMode;
+
+  /// Called every time the code content changes.
   final ValueChanged<String>? onChanged;
+
+  /// Called when the user taps a line in [selectionMode].
+  ///
+  /// Receives the 0-based line index and the raw line content.
   final void Function(int lineIndex, String lineContent)? onLineSelected;
+
+  /// Additional keywords injected into the autocomplete engine.
+  ///
+  /// These are combined with the built-in Dart keywords and types.
+  /// Defaults to an empty list.
   final List<String> customKeywords;
 
+  /// Creates a [CodeEditor] widget.
   const CodeEditor({
     super.key,
     required this.controller,

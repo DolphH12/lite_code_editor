@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'highlight_colors.dart';
 import 'syntax_highlighter.dart';
 
-/// Highlighter para Dart/Flutter.
-/// Tokeniza el código con RegExp y produce [TextSpan]s coloreados.
+/// Syntax highlighter for Dart and Flutter code.
+///
+/// Tokenizes the source using a single [RegExp] pass and maps each
+/// token to a color defined in [HighlightColors].
 class DartHighlighter implements SyntaxHighlighter {
-  // ── Palabras clave del lenguaje ────────────────────────────────────────────
+  /// All reserved Dart keywords recognized by this highlighter.
   static const keywords = {
     'abstract',
     'as',
@@ -74,7 +76,7 @@ class DartHighlighter implements SyntaxHighlighter {
     'yield',
   };
 
-  // ── Tipos built-in ─────────────────────────────────────────────────────────
+  /// Built-in Dart types recognized by this highlighter.
   static const builtinTypes = {
     'bool',
     'double',
@@ -116,6 +118,7 @@ class DartHighlighter implements SyntaxHighlighter {
     multiLine: true,
   ); // mismo contenido, quita el _
 
+  /// Highlights [code] and returns a [TextSpan] tree.
   @override
   TextSpan highlight(String code) {
     if (code.isEmpty) return const TextSpan(text: '');
