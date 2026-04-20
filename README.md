@@ -13,7 +13,7 @@ auto-indent, autocomplete, and line selection — zero external dependencies.
 
 | Editing mode | Selection mode | Autocomplete |
 |:---:|:---:|:---:|
-| ![Editing](docs/preview_edit.png) | ![Selection](docs/preview_selection.png) | ![Autocomplete](docs/preview_autocomplete.png) |
+| ![Editing](doc/preview_edit.png) | ![Selection](doc/preview_selection.png) | ![Autocomplete](doc/preview_autocomplete.png) |
 ---
 
 ## Features
