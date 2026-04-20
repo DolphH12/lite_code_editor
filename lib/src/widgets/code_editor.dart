@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../lite_code_editor.dart';
-import '../controller/code_editor_controller.dart';
-import '../highlight/dart_highlighter.dart';
-import '../highlight/syntax_highlighter.dart';
 import 'code_field.dart';
 import 'line_numbers.dart';
 
@@ -225,7 +222,7 @@ class _SuggestionsBar extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
               itemCount: suggestions.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 6),
+              separatorBuilder: (_, _) => const SizedBox(width: 6),
               itemBuilder: (context, i) {
                 return GestureDetector(
                   onTap: () => onSelected(suggestions[i]),

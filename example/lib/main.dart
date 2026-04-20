@@ -121,7 +121,7 @@ class _EditorDemoPageState extends State<EditorDemoPage> {
                   const SizedBox(width: 8),
                   Switch(
                     value: _selectionMode,
-                    activeColor: const Color(0xFF569CD6),
+                    activeThumbColor: const Color(0xFF569CD6),
                     onChanged: (v) => setState(() {
                       _selectionMode = v;
                       _controller.selectLine(null);
