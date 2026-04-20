@@ -1,7 +1,12 @@
 name: lite_code_editor
-description: "A new Flutter package project."
-version: 0.0.1
-homepage:
+description: >
+  A lightweight, customizable Flutter code editor widget with syntax
+  highlighting, auto-indent, autocomplete, line selection mode, and
+  dark/light themes. No heavy dependencies — pure Flutter.
+version: 0.1.0
+homepage: https://github.com/DolphH12/lite_code_editor
+repository: https://github.com/DolphH12/lite_code_editor
+issue_tracker: https://github.com/DolphH12/lite_code_editor/issues
 
 environment:
   sdk: ^3.11.4
@@ -17,3 +22,10 @@ dev_dependencies:
   flutter_lints: ^6.0.0
 
 flutter:
+
+topics:
+  - editor
+  - code
+  - syntax-highlighting
+  - ide
+  - dart

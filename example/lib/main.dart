@@ -10,7 +10,14 @@ class ExampleApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'LiteCodeEditor Demo',
-      theme: ThemeData.dark(),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: const Color(0xFF12121F),
+        colorScheme: const ColorScheme.dark(
+          primary: Color(0xFF569CD6),
+          surface: Color(0xFF1E1E2E),
+        ),
+      ),
       home: const EditorDemoPage(),
     );
   }
@@ -25,11 +32,9 @@ class EditorDemoPage extends StatefulWidget {
 
 class _EditorDemoPageState extends State<EditorDemoPage> {
   late final CodeEditorController _controller;
-
-  String _lastChanged = '';
+  bool _selectionMode = false;
   int? _selectedLineIndex;
   String? _selectedLineContent;
-  bool _selectionMode = false;
 
   @override
   void initState() {
@@ -46,118 +51,195 @@ class _EditorDemoPageState extends State<EditorDemoPage> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('LiteCodeEditor — Fase 1'),
+  void _onSubmit() {
+    final code = _controller.code;
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: const Color(0xFF1E1E2E),
+        title: const Text(
+          'Código capturado',
+          style: TextStyle(color: Color(0xFF569CD6), fontSize: 16),
+        ),
+        content: Text(
+          '${_controller.lines.length} líneas · '
+          '${code.length} caracteres',
+          style: const TextStyle(color: Color(0xFFD4D4D4)),
+        ),
         actions: [
-          // Toggle modo selección
-          Row(
-            children: [
-              const Text('Selección'),
-              Switch(
-                value: _selectionMode,
-                onChanged: (v) => setState(() {
-                  _selectionMode = v;
-                  _controller.selectLine(null);
-                }),
-              ),
-            ],
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          // ── Editor ────────────────────────────────────────────────────────
-          Expanded(
-            child: // En el widget CodeEditor del ejemplo agrega:
-            CodeEditor(
-              controller: _controller,
-              theme: EditorTheme.dark(),
-              selectionMode: _selectionMode,
-              customKeywords: const [
-                'runApp',
-                'setState',
-                'initState',
-                'dispose',
-                'BuildContext',
-                'StatelessWidget',
-                'StatefulWidget',
-                'MaterialApp',
-                'Scaffold',
-                'AppBar',
-                'Column',
-                'Row',
-                'Text',
-                'Container',
-                'Expanded',
-                'Padding',
-              ],
-              onChanged: (code) => setState(() => _lastChanged = code),
-              onLineSelected: (index, content) => setState(() {
-                _selectedLineIndex = index;
-                _selectedLineContent = content.trim();
-              }),
-            ),
-          ),
-
-          // ── Panel de debug ────────────────────────────────────────────────
-          Container(
-            color: const Color(0xFF252526),
-            padding: const EdgeInsets.all(12),
-            width: double.infinity,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  _selectionMode
-                      ? 'MODO SELECCIÓN — toca un número de línea'
-                      : 'MODO EDICIÓN — escribe libremente',
-                  style: const TextStyle(
-                    color: Color(0xFF569CD6),
-                    fontFamily: 'monospace',
-                    fontSize: 12,
-                  ),
-                ),
-                if (_selectionMode && _selectedLineIndex != null) ...[
-                  const SizedBox(height: 4),
-                  Text(
-                    'Línea seleccionada: ${_selectedLineIndex! + 1}',
-                    style: const TextStyle(
-                      color: Color(0xFF9CDCFE),
-                      fontFamily: 'monospace',
-                      fontSize: 12,
-                    ),
-                  ),
-                  Text(
-                    'Contenido: ${_selectedLineContent?.trim()}',
-                    style: const TextStyle(
-                      color: Color(0xFFCE9178),
-                      fontFamily: 'monospace',
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
-                const SizedBox(height: 4),
-                Text(
-                  'Total líneas: ${_controller.lines.length}',
-                  style: const TextStyle(
-                    color: Color(0xFF858585),
-                    fontFamily: 'monospace',
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cerrar'),
           ),
         ],
       ),
     );
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // ── Título ───────────────────────────────────────────────────
+              const Text(
+                'Editor de código',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFD4D4D4),
+                  letterSpacing: 0.3,
+                ),
+              ),
+
+              const SizedBox(height: 8),
+
+              // ── Descripción ──────────────────────────────────────────────
+              const Text(
+                'Escribe o pega tu código Dart. Puedes editar libremente '
+                'o activar el modo selección para elegir una línea específica.',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Color(0xFF858585),
+                  height: 1.5,
+                ),
+              ),
+
+              const SizedBox(height: 6),
+
+              // ── Toggle modo selección ────────────────────────────────────
+              Row(
+                children: [
+                  const Text(
+                    'Modo selección',
+                    style: TextStyle(fontSize: 13, color: Color(0xFF9CDCFE)),
+                  ),
+                  const SizedBox(width: 8),
+                  Switch(
+                    value: _selectionMode,
+                    activeColor: const Color(0xFF569CD6),
+                    onChanged: (v) => setState(() {
+                      _selectionMode = v;
+                      _controller.selectLine(null);
+                      _selectedLineIndex = null;
+                      _selectedLineContent = null;
+                    }),
+                  ),
+                  if (_selectionMode && _selectedLineIndex != null) ...[
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Línea ${_selectedLineIndex! + 1}: '
+                        '${_selectedLineContent?.trim() ?? ''}',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'monospace',
+                          color: Color(0xFFCE9178),
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+
+              const SizedBox(height: 12),
+
+              // ── Editor ───────────────────────────────────────────────────
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: const Color(0xFF3C3C6C),
+                        width: 1,
+                      ),
+                    ),
+                    child: CodeEditor(
+                      controller: _controller,
+                      theme: EditorTheme.dark(),
+                      selectionMode: _selectionMode,
+                      customKeywords: const [
+                        'runApp',
+                        'setState',
+                        'initState',
+                        'dispose',
+                        'BuildContext',
+                        'StatelessWidget',
+                        'StatefulWidget',
+                        'MaterialApp',
+                        'Scaffold',
+                        'AppBar',
+                        'Column',
+                        'Row',
+                        'Text',
+                        'Container',
+                        'Expanded',
+                        'Padding',
+                      ],
+                      onChanged: (code) => setState(() {}),
+                      onLineSelected: (index, content) => setState(() {
+                        _selectedLineIndex = index;
+                        _selectedLineContent = content;
+                      }),
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // ── Info líneas + botón ──────────────────────────────────────
+              Row(
+                children: [
+                  Text(
+                    '${_controller.lines.length} líneas  ·  '
+                    '${_controller.code.length} caracteres',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF585870),
+                      fontFamily: 'monospace',
+                    ),
+                  ),
+                  const Spacer(),
+                  FilledButton(
+                    onPressed: _onSubmit,
+                    style: FilledButton.styleFrom(
+                      backgroundColor: const Color(0xFF569CD6),
+                      foregroundColor: const Color(0xFF12121F),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                    ),
+                    child: const Text(
+                      'Guardar código',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
-// ── Código de muestra ──────────────────────────────────────────────────────────
+// ── Código de muestra ──────────────────────────────────────────────────────
 
 const _sampleCode = '''
 import 'package:flutter/material.dart';

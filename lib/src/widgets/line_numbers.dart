@@ -26,7 +26,7 @@ class LineNumbers extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final digits = lineCount.toString().length;
-    final gutterWidth = (digits * fontSize * 0.65 + 24).clamp(48.0, 80.0);
+    final gutterWidth = (digits * fontSize * 0.65 + 15).clamp(30.0, 80.0);
 
     return Container(
       width: gutterWidth,
